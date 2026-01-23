@@ -14,6 +14,8 @@ constexpr int INITIAL_SUN = 2000;   // 初始阳光值
 constexpr bool WAVE_PAINTER_ENABLED = true;     // 是否启用波数绘制
 constexpr bool COB_HP_PAINTER_ENABLED = true;   // 是否启用炮生命绘制
 constexpr bool CONTINUOUS_MODE = false;          // 连续全难度冲关。为false则为2F演示
+constexpr int N_PLANT_TIME = 1488 - 200;    // W9/W19毁灭菇的种植时间点
+constexpr int COB_EMPTY_STATE = 35; // 空炮状态值
 
 // 日志对象
 ALogger<AConsole> logger;
@@ -258,6 +260,7 @@ class FinalWaveHandler {
         ATickRunner giga_runner;
         ATickRunner cleanup_runner;
         ATickRunner pogo_runner;
+        ATickRunner cobs_detect_runner;
         FodderManager fodder_manager;
         AAliveFilter<AZombie> giga;
         AAliveFilter<AZombie> pogo;
@@ -315,7 +318,7 @@ class FinalWaveHandler {
                     target_row = 5; 
                 }
 
-                logger.Info("The target row is # in wave # ", target_row, wave);
+                logger.Info("The target row is # in wave #. ", target_row, wave);
 
                 row_selected = true;
                 giga_runner.Stop();
@@ -323,7 +326,7 @@ class FinalWaveHandler {
 
             // 在此之前会固定打全3炮
             // 根据红眼的分布情况决定第4炮的位置
-            int cob_start_time = (wave == 20) ? 500 : 1438 - 200 - COB_TIME;
+            int cob_start_time = (wave == 20) ? 500 : N_PLANT_TIME + N_TIME + 215 - COB_TIME + 1;
             AConnect(ATime(wave, cob_start_time), [=, this] {
                 if (!row_selected) {return;}
                 if (dancer_cheat) {
@@ -385,8 +388,28 @@ class FinalWaveHandler {
                     stop(20, 5500);
 
                     if (row_selected && !dancer_cheat) {
-                        ACard({{AWG_17, target_row, FODDER_COL}});
+                        ACard({{ASQUASH, target_row, FODDER_COL}});
                     }
+                });
+
+                // 启动线程，如果全场的炮都恢复了，则没有必要继续拖时间
+                AConnect(ATime(wave, 341 - COB_TIME + 3475), [this] {
+                    cobs_detect_runner.Start([this] {
+                        for (auto& plant : aAlivePlantFilter) {
+                            if (plant.Type() == ACOB_CANNON && plant.State() == COB_EMPTY_STATE) {
+                                return;
+                            }
+                        }
+
+                        if (row_selected && !dancer_cheat) {
+                            fodder_manager.stopBlockGargantuar();
+                            removePlants();
+                            ACard({{ASQUASH, target_row, FODDER_COL}});
+                            logger.Info("All cob cannons have recovered. Planting Squash to finish the wave.");
+                            cobs_detect_runner.Stop();
+                        }
+                    });
+
                 });
 
                 // 启动线程，如果场上没有红眼僵尸，则铲除多余植物
@@ -433,13 +456,16 @@ class FinalWaveHandler {
             giga_runner.Stop();
             cleanup_runner.Stop();
             pogo_runner.Stop();
+            cobs_detect_runner.Stop();
         }
 
         // 铲除寒冰射手和垫材
         void removePlants() {
             ARemovePlant(1, SNOW_PEA_COL);
             ARemovePlant(5, SNOW_PEA_COL);
-            ARemovePlant(target_row, FODDER_COL);
+            if (row_selected && !dancer_cheat) {
+                ARemovePlant(target_row, FODDER_COL);
+            }
         }
         
         // 获取当前波下指定行的红眼数量
@@ -591,8 +617,8 @@ void AScript()
 
             // N
             AConnect(ATime(wave, wave_lengths[wave] - 200 - N_TIME), [=]{
-                int row = (wave == 2) ? 2 : 3;
-                float col = 9.0f;
+                int row = 2;
+                float col = (wave == 2) ? 9.0f : 8.0f;
                 plantN(row, col);
             });
         }
@@ -639,13 +665,18 @@ void AScript()
             // PP
             AConnect(ATime(wave, 1438 - 200 - COB_TIME), [=] {
                 aCobManager.Fire({{2, COB_HIT_COL}, {4, COB_HIT_COL}});
-                aCobManager.RecoverFire({{2, 9}, {4, 9}});
             });
 
             // N
-            AConnect(ATime(wave, 1438 - 200), [=] {
-                int doom_row = (wave == 9) ? 2 : 3;
-                plantN(doom_row, 8.0f);
+            AConnect(ATime(wave, N_PLANT_TIME), [=] {
+                int row = 3;
+                float col = (wave == 9) ? 9.0f : 8.0f;
+                plantN(row, col);
+            });
+
+            // N造成伤害后的减速拦截
+            AConnect(ATime(wave, N_PLANT_TIME + N_TIME + 215 - COB_TIME), [=] {
+                aCobManager.Fire({{1, 8.8}, {4, 8.8}});
             });
         }
 
@@ -680,7 +711,7 @@ void AScript()
             });
 
             // 最后一次用冰完成后，停止进一步存冰，维持阵型
-            AConnect(ATime(wave, 415 - ICE_TIME), [=] {
+            AConnect(ATime(wave, HIT_TIME + 100 - ICE_TIME), [=] {
                 aIceFiller.Coffee();
                 aIceFiller.Stop();
                 aIceFiller.Start({
