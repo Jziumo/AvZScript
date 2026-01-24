@@ -1,10 +1,14 @@
 # DE. 准超前置10炮
 
+中文 | [English](./README_EN.md)
+
 [返回目录](../README.md)
 
 ## 阵设
 
 <img src="./de_semi_front_10_cobs.png" width="400">
+
+🎥 视频演示: BiliBili | YouTube
 
 主要采用 `ch5` 节奏：
 ```
@@ -26,11 +30,6 @@ PP |IPP-N|PP |IPP-PP|PP |IPP-PP|IPP-PP|PP |IPP-PP|IPP-PP
 
 核代奏在这里可以减少冰的使用，使开局1个存冰就足够供应。然而这并没有什么卵用，因为完全可以开局有2个甚至3个存冰，阵型的 `(2,4)`、`(3,4)`、`(4,4)` 都可以看作安全存冰位，所以其实完全没有必要插入核代奏。
 
-我对这个构型的理解：**不要存在两个连续的加速波**即可，否则
-- 小鬼可能啃底线炮
-- 小鬼可能把存冰吃掉
-- 6列炮可能被砸
-
 ### 选择你的植物/僵尸
 
 <img src="./assets/choose_your_seeds.png" width="400">
@@ -45,7 +44,7 @@ ASelectCards({AHBG_14, AM_HBG_14, AKFD_35, AHMG_15, AHBSS_5, AWG_17, AXPG_8, AYG
 
 ## 脚本实现
 
-[脚本文件](./de_semi_front_10_cobs.cpp)
+📄 [脚本文件](./de_semi_front_10_cobs.cpp)
 
 ### 自动垫巨人
 
