@@ -4,11 +4,11 @@
 
 [返回目录](../README.md)
 
+⚙️ [脚本文件](./de_semi_front_10_cobs.cpp) · 💾 [游戏存档](./game1_11.dat) · 🎥 [Bilibili](https://www.bilibili.com/video/BV1ivz2BpE5F/) | [YouTube](https://youtu.be/emwXFWFWcls)
+
 ## 阵设
 
 <img src="./de_semi_front_10_cobs.png" width="400">
-
-🎥 视频演示: BiliBili | YouTube
 
 主要采用 `ch5` 节奏：
 ```
@@ -35,9 +35,35 @@ PP |IPP-N|PP |IPP-PP|PP |IPP-PP|IPP-PP|PP |IPP-PP|IPP-PP
 <img src="./assets/choose_your_seeds.png" width="400">
 
 ```cpp
-ASetZombies({ACG_3, AWW_8, ABC_12, AXC_15,AKG_17, ATT_18, ABJ_20, AFT_21, ATL_22, ABY_23,AHY_32, AQQ_16});
+// zombies
+ASetZombies({
+    APOLE_VAULTING_ZOMBIE, 
+    ADANCING_ZOMBIE, 
+    AZOMBONI, 
+    AJACK_IN_THE_BOX_ZOMBIE, 
+    ADIGGER_ZOMBIE, 
+    APOGO_ZOMBIE, 
+    ABUNGEE_ZOMBIE, 
+    ALADDER_ZOMBIE, 
+    ACATAPULT_ZOMBIE, 
+    AGARGANTUAR, 
+    AGIGA_GARGANTUAR, 
+    ABALLOON_ZOMBIE
+});
 
-ASelectCards({AHBG_14, AM_HBG_14, AKFD_35, AHMG_15, AHBSS_5, AWG_17, AXPG_8, AYGG_9, ADXG_13, AHP_33});
+// plants
+ASelectCards({
+    AICE_SHROOM, 
+    AM_ICE_SHROOM, 
+    ACOFFEE_BEAN, 
+    ADOOM_SHROOM, 
+    ASNOW_PEA, 
+    ASQUASH, 
+    APUFF_SHROOM, 
+    ASUN_SHROOM, 
+    ASCAREDY_SHROOM, 
+    AFLOWER_POT
+});
 ```
 寒冰射手用于 `W9/W19/W20` 的收尾，可以显著减少垫巨人的压力，实际上只带3垫也没问题。没有测试只带双垫的效果。
 

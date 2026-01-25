@@ -4,11 +4,11 @@
 
 [Return to Homepage](../README.md)
 
+⚙️ [Script](./de_semi_front_10_cobs.cpp) · 💾 [Game Data](./game1_11.dat) · 🎥 [Bilibili](https://www.bilibili.com/video/BV1ivz2BpE5F/) | [YouTube](https://youtu.be/emwXFWFWcls)
+
 ## Setup Overview
 
 <img src="./de_semi_front_10_cobs.png" width="400">
-
-🎥 Video Demo: BiliBili | YouTube
 
 This setup primarily follows the `ch5` rhythm:
 
@@ -36,9 +36,35 @@ The purpose of using a doom here is to reduce ice usage, allowing the setup to r
 <img src="./assets/choose_your_seeds.png" width="400">
 
 ```cpp
-ASetZombies({ACG_3, AWW_8, ABC_12, AXC_15,AKG_17, ATT_18, ABJ_20, AFT_21, ATL_22, ABY_23,AHY_32, AQQ_16});
+// zombies
+ASetZombies({
+    APOLE_VAULTING_ZOMBIE, 
+    ADANCING_ZOMBIE, 
+    AZOMBONI, 
+    AJACK_IN_THE_BOX_ZOMBIE, 
+    ADIGGER_ZOMBIE, 
+    APOGO_ZOMBIE, 
+    ABUNGEE_ZOMBIE, 
+    ALADDER_ZOMBIE, 
+    ACATAPULT_ZOMBIE, 
+    AGARGANTUAR, 
+    AGIGA_GARGANTUAR, 
+    ABALLOON_ZOMBIE
+});
 
-ASelectCards({AHBG_14, AM_HBG_14, AKFD_35, AHMG_15, AHBSS_5, AWG_17, AXPG_8, AYGG_9, ADXG_13, AHP_33});
+// plants
+ASelectCards({
+    AICE_SHROOM, 
+    AM_ICE_SHROOM, 
+    ACOFFEE_BEAN, 
+    ADOOM_SHROOM, 
+    ASNOW_PEA, 
+    ASQUASH, 
+    APUFF_SHROOM, 
+    ASUN_SHROOM, 
+    ASCAREDY_SHROOM, 
+    AFLOWER_POT
+});
 ```
 Snow Pea is used for **final cleanup** on `W9 / W19 / W20`, significantly reducing the pressure on giga blocking.
 
